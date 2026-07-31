@@ -25,8 +25,13 @@ export const uploadvideo = async (req, res) => {
   }
 };
 export const getallvideo = async (req, res) => {
+  const { category } = req.query;
   try {
-    const files = await video.find();
+    let query = {};
+    if (category && category !== "All") {
+      query = { videotitle: category };
+    }
+    const files = await video.find(query);
     return res.status(200).send(files);
   } catch (error) {
     console.error(" error:", error);
