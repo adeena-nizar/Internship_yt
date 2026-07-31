@@ -1,3 +1,4 @@
+"use client";
 import {
   Home,
   Compass,
@@ -6,90 +7,112 @@ import {
   ThumbsUp,
   History,
   User,
+  Menu,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import Channeldialogue from "./channeldialogue";
 import { useUser } from "@/lib/AuthContext";
+import { cn } from "@/lib/utils";
 
 const Sidebar = () => {
   const { user } = useUser();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const [isdialogeopen, setisdialogeopen] = useState(false);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <aside className="w-64 bg-white  border-r min-h-screen p-2">
-      <nav className="space-y-1">
-        <Link href="/">
-          <Button variant="ghost" className="w-full justify-start">
-            <Home className="w-5 h-5 mr-3" />
-            Home
-          </Button>
-        </Link>
-        <Link href="/explore">
-          <Button variant="ghost" className="w-full justify-start">
-            <Compass className="w-5 h-5 mr-3" />
-            Explore
-          </Button>
-        </Link>
-        <Link href="/subscriptions">
-          <Button variant="ghost" className="w-full justify-start">
-            <PlaySquare className="w-5 h-5 mr-3" />
-            Subscriptions
-          </Button>
-        </Link>
-
-        {user && (
-          <>
-            <div className="border-t pt-2 mt-2">
-              <Link href="/history">
-                <Button variant="ghost" className="w-full justify-start">
-                  <History className="w-5 h-5 mr-3" />
-                  History
-                </Button>
-              </Link>
-              <Link href="/liked">
-                <Button variant="ghost" className="w-full justify-start">
-                  <ThumbsUp className="w-5 h-5 mr-3" />
-                  Liked videos
-                </Button>
-              </Link>
-              <Link href="/watch-later">
-                <Button variant="ghost" className="w-full justify-start">
-                  <Clock className="w-5 h-5 mr-3" />
-                  Watch later
-                </Button>
-              </Link>
-              {user?.channelname ? (
-                <Link href={`/channel/${user.id}`}>
-                  <Button variant="ghost" className="w-full justify-start">
-                    <User className="w-5 h-5 mr-3" />
-                    Your channel
-                  </Button>
-                </Link>
-              ) : (
-                <div className="px-2 py-1.5">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="w-full"
-                    onClick={() => setisdialogeopen(true)}
-                  >
-                    Create Channel
-                  </Button>
-                </div>
-              )}
-            </div>
-          </>
+    <>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="fixed top-4 left-4 z-50 md:hidden"
+        onClick={toggleSidebar}
+      >
+        {isSidebarOpen ? <X /> : <Menu />}
+      </Button>
+      <aside
+        className={cn(
+          "bg-gray-50 border-r h-full p-4 transition-all duration-300 ease-in-out",
+          "fixed md:relative md:translate-x-0",
+          isSidebarOpen
+            ? "w-64 translate-x-0"
+            : "w-20 -translate-x-full md:translate-x-0"
         )}
-      </nav>
-      <Channeldialogue
-        isopen={isdialogeopen}
-        onclose={() => setisdialogeopen(false)}
-        mode="create"
-      />
-    </aside>
+      >
+        <nav className="space-y-2">
+          <SidebarLink href="/" icon={<Home />} isOpen={isSidebarOpen}>
+            Home
+          </SidebarLink>
+          <SidebarLink
+            href="/explore"
+            icon={<Compass />}
+            isOpen={isSidebarOpen}
+          >
+            Explore
+          </SidebarLink>
+          <SidebarLink
+            href="/subscriptions"
+            icon={<PlaySquare />}
+            isOpen={isSidebarOpen}
+          >
+            Subscriptions
+          </SidebarLink>
+
+          <div className="border-t my-4"></div>
+
+          <SidebarLink
+            href="/history"
+            icon={<History />}
+            isOpen={isSidebarOpen}
+          >
+            History
+          </SidebarLink>
+          <SidebarLink href="/liked" icon={<ThumbsUp />} isOpen={isSidebarOpen}>
+            Liked videos
+          </SidebarLink>
+          <SidebarLink
+            href="/watch-later"
+            icon={<Clock />}
+            isOpen={isSidebarOpen}
+          >
+            Watch later
+          </SidebarLink>
+
+          {user && (
+            <>
+              <div className="border-t my-4"></div>
+              <SidebarLink
+                href={`/channel/${user.id}`}
+                icon={<User />}
+                isOpen={isSidebarOpen}
+              >
+                Your channel
+              </SidebarLink>
+            </>
+          )}
+        </nav>
+      </aside>
+    </>
   );
 };
+
+const SidebarLink = ({ href, icon, isOpen, children }: any) => (
+  <Link href={href}>
+    <Button
+      variant="ghost"
+      className={cn(
+        "w-full flex items-center gap-4 transition-all",
+        isOpen ? "justify-start" : "justify-center"
+      )}
+    >
+      {icon}
+      {isOpen && <span className="font-medium">{children}</span>}
+    </Button>
+  </Link>
+);
 
 export default Sidebar;
