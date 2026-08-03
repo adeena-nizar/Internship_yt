@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
-import { MoreVertical, X, Clock } from "lucide-react";
+import { MoreVertical, X, Clock, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,60 +12,35 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import axiosInstance from "@/lib/axiosinstance";
-import { useUser } from "@/lib/AuthContext";
 
 export default function HistoryContent() {
   const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useUser();
 
   useEffect(() => {
-    if (user) {
-      loadHistory();
-    } else {
-      setLoading(true);
-    }
-  }, [user]);
+    loadHistory();
+  }, []);
 
-  const loadHistory = async () => {
-    if (!user) return;
-
-    try {
-      const historyData = await axiosInstance.get(`/history/${user?._id}`);
-      setHistory(historyData.data);
-    } catch (error) {
-      console.error("Error loading history:", error);
-    } finally {
-      setLoading(false);
-    }
+  const loadHistory = () => {
+    setLoading(true);
+    const historyData = JSON.parse(localStorage.getItem("watchHistory") || "[]");
+    setHistory(historyData);
+    setLoading(false);
   };
+
+  const handleRemoveFromHistory = (videoId: string) => {
+    const updatedHistory = history.filter((item) => item._id !== videoId);
+    setHistory(updatedHistory);
+    localStorage.setItem("watchHistory", JSON.stringify(updatedHistory));
+  };
+
+  const handleClearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem("watchHistory");
+  };
+
   if (loading) {
     return <div>Loading history...</div>;
-  }
-
-  const handleRemoveFromHistory = async (historyId: string) => {
-    try {
-      console.log("Removing from history:", historyId);
-
-      setHistory(history.filter((item) => item._id !== historyId));
-    } catch (error) {
-      console.error("Error removing from history:", error);
-    }
-  };
-
-  if (!user) {
-    return (
-      <div className="text-center py-12">
-        <Clock className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-        <h2 className="text-xl font-semibold mb-2">
-          Keep track of what you watch
-        </h2>
-        <p className="text-gray-600">
-          Watch history isn't viewable when signed out.
-        </p>
-      </div>
-    );
   }
 
   if (history.length === 0) {
@@ -77,40 +52,41 @@ export default function HistoryContent() {
       </div>
     );
   }
-  const videos = "/video/vdo.mp4";
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <p className="text-sm text-gray-600">{history.length} videos</p>
+        <Button variant="ghost" onClick={handleClearHistory}>
+          <Trash2 className="w-4 h-4 mr-2" />
+          Clear all watch history
+        </Button>
       </div>
 
       <div className="space-y-4">
-        {history.map((item) => (
-          <div key={item._id} className="flex gap-4 group">
-            <Link href={`/watch/${item.videoid._id}`} className="flex-shrink-0">
+        {history.map((video) => (
+          <div key={video._id} className="flex gap-4 group">
+            <Link href={`/watch/${video._id}`} className="flex-shrink-0">
               <div className="relative w-40 aspect-video bg-gray-100 rounded overflow-hidden">
-                <video
-                  src={`${process.env.BACKEND_URL}/${item.videoid?.filepath}`}
+                <Image
+                  src={video.thumbnail}
+                  alt={video.title}
+                  layout="fill"
                   className="object-cover group-hover:scale-105 transition-transform duration-200"
                 />
               </div>
             </Link>
 
             <div className="flex-1 min-w-0">
-              <Link href={`/watch/${item.videoid._id}`}>
+              <Link href={`/watch/${video._id}`}>
                 <h3 className="font-medium text-sm line-clamp-2 group-hover:text-blue-600 mb-1">
-                  {item.videoid.videotitle}
+                  {video.title}
                 </h3>
               </Link>
+              <p className="text-sm text-gray-600">{video.channelName}</p>
               <p className="text-sm text-gray-600">
-                {item.videoid.videochanel}
-              </p>
-              <p className="text-sm text-gray-600">
-                {item.videoid.views.toLocaleString()} views •{" "}
-                {formatDistanceToNow(new Date(item.videoid.createdAt))} ago
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                Added {formatDistanceToNow(new Date(item.createdAt))} ago
+                {video.views} &bull;{" "}
+                {formatDistanceToNow(new Date(video.watchedAt))} ago
               </p>
             </div>
 
@@ -126,7 +102,7 @@ export default function HistoryContent() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
-                  onClick={() => handleRemoveFromHistory(item._id)}
+                  onClick={() => handleRemoveFromHistory(video._id)}
                 >
                   <X className="w-4 h-4 mr-2" />
                   Remove from watch history

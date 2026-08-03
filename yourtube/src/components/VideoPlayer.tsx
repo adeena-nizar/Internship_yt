@@ -30,23 +30,46 @@ const VideoPlayer = ({ video }: any) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
 
-    const handleTimeUpdate = () => setCurrentTime(video.currentTime);
-    const handleDurationChange = () => setDuration(video.duration);
+    const handleTimeUpdate = () => setCurrentTime(videoElement.currentTime);
+    const handleDurationChange = () => setDuration(videoElement.duration);
     const handleError = () => setError(true);
 
-    video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("durationchange", handleDurationChange);
-    video.addEventListener("error", handleError);
+    const handlePlay = () => {
+      setIsPlaying(true);
+      const history = JSON.parse(localStorage.getItem("watchHistory") || "[]");
+      const existingIndex = history.findIndex((v: any) => v._id === video._id);
+      if (existingIndex > -1) {
+        history.splice(existingIndex, 1);
+      }
+      const videoData = {
+        ...video,
+        watchedAt: new Date().toISOString(),
+      };
+      history.unshift(videoData);
+      localStorage.setItem("watchHistory", JSON.stringify(history));
+    };
+
+    const handlePause = () => {
+      setIsPlaying(false);
+    };
+
+    videoElement.addEventListener("timeupdate", handleTimeUpdate);
+    videoElement.addEventListener("durationchange", handleDurationChange);
+    videoElement.addEventListener("error", handleError);
+    videoElement.addEventListener("play", handlePlay);
+    videoElement.addEventListener("pause", handlePause);
 
     return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("durationchange", handleDurationChange);
-      video.removeEventListener("error", handleError);
+      videoElement.removeEventListener("timeupdate", handleTimeUpdate);
+      videoElement.removeEventListener("durationchange", handleDurationChange);
+      videoElement.removeEventListener("error", handleError);
+      videoElement.removeEventListener("play", handlePlay);
+      videoElement.removeEventListener("pause", handlePause);
     };
-  }, []);
+  }, [video]);
 
   const togglePlay = () => {
     const video = videoRef.current;
