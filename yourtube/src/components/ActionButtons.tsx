@@ -7,16 +7,26 @@ import {
   Download,
   Bookmark,
   MoreHorizontal,
+  Clock,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const ActionButtons = ({ video }: { video: any }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [isWatchLater, setIsWatchLater] = useState(false);
 
   useEffect(() => {
     const likedVideos = JSON.parse(localStorage.getItem("likedVideos") || "[]");
     const videoIsLiked = likedVideos.some((v: any) => v._id === video._id);
     setIsLiked(videoIsLiked);
+
+    const watchLaterVideos = JSON.parse(
+      localStorage.getItem("watchLaterVideos") || "[]"
+    );
+    const videoIsWatchLater = watchLaterVideos.some(
+      (v: any) => v._id === video._id
+    );
+    setIsWatchLater(videoIsWatchLater);
   }, [video]);
 
   const convertRelativeDate = (relativeDate: string) => {
@@ -75,6 +85,32 @@ const ActionButtons = ({ video }: { video: any }) => {
     localStorage.setItem("likedVideos", JSON.stringify(likedVideos));
   };
 
+  const handleWatchLater = () => {
+    const watchLaterVideos = JSON.parse(
+      localStorage.getItem("watchLaterVideos") || "[]"
+    );
+    const videoIndex = watchLaterVideos.findIndex(
+      (v: any) => v._id === video._id
+    );
+
+    if (videoIndex > -1) {
+      watchLaterVideos.splice(videoIndex, 1);
+      setIsWatchLater(false);
+    } else {
+      const videoToStore = { ...video };
+      if (
+        typeof videoToStore.uploadedAt === "string" &&
+        videoToStore.uploadedAt.endsWith("ago")
+      ) {
+        videoToStore.uploadedAt = convertRelativeDate(videoToStore.uploadedAt);
+      }
+      watchLaterVideos.unshift(videoToStore);
+      setIsWatchLater(true);
+    }
+
+    localStorage.setItem("watchLaterVideos", JSON.stringify(watchLaterVideos));
+  };
+
   return (
     <div className="flex items-center gap-2">
       <Button
@@ -110,9 +146,10 @@ const ActionButtons = ({ video }: { video: any }) => {
       <Button
         variant="ghost"
         className="rounded-full hover:bg-gray-200 px-4 py-2"
+        onClick={handleWatchLater}
       >
-        <Bookmark className="w-6 h-6 mr-2" />
-        <span>Save</span>
+        <Clock className={`w-6 h-6 mr-2 ${isWatchLater ? "fill-current" : ""}`} />
+        <span>{isWatchLater ? "Added" : "Watch Later"}</span>
       </Button>
       <Button
         variant="ghost"

@@ -2,9 +2,32 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "./ui/avatar";
-import { CheckCircle, MoreVertical } from "lucide-react";
+import { CheckCircle, MoreVertical, Clock } from "lucide-react";
+import { Button } from "./ui/button";
 
 export default function VideoCard({ video }: any) {
+  const handleWatchLater = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const watchLaterVideos = JSON.parse(
+      localStorage.getItem("watchLaterVideos") || "[]"
+    );
+    const videoIndex = watchLaterVideos.findIndex(
+      (v: any) => v._id === video._id
+    );
+
+    if (videoIndex === -1) {
+      watchLaterVideos.unshift(video);
+      localStorage.setItem(
+        "watchLaterVideos",
+        JSON.stringify(watchLaterVideos)
+      );
+      alert("Added to Watch Later");
+    } else {
+      alert("Already in Watch Later");
+    }
+  };
+
   return (
     <Link href={`/watch/${video?._id}`} className="group block">
       <div className="flex flex-col space-y-3">
@@ -19,6 +42,14 @@ export default function VideoCard({ video }: any) {
           <div className="absolute bottom-2 right-2 bg-black/75 text-white text-xs font-semibold px-2 py-1 rounded-md">
             {video.duration}
           </div>
+          <Button
+            size="sm"
+            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={handleWatchLater}
+          >
+            <Clock className="w-4 h-4 mr-1" />
+            Watch Later
+          </Button>
         </div>
         <div className="flex items-start space-x-3">
           <Avatar className="h-10 w-10 flex-shrink-0">

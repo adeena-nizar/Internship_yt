@@ -26,7 +26,7 @@ const WatchPage = () => {
               <p className="text-gray-500">
                 {video.views} &bull; {video.uploadedAt}
               </p>
-              <ActionButtons />
+              <ActionButtons video={video} />
             </div>
             <div className="border-t border-b py-4">
               <ChannelInfo video={video} />

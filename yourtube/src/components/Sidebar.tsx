@@ -79,11 +79,11 @@ const Sidebar = () => {
             History
           </SidebarLink>
           <SidebarLink
-            href="/your-videos"
+            href="/channel"
             icon={<PlaySquare />}
             isOpen={isSidebarOpen}
           >
-            Your videos
+            Your channel
           </SidebarLink>
           <SidebarLink
             href="/watch-later"
