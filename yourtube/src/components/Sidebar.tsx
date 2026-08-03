@@ -65,14 +65,25 @@ const Sidebar = () => {
           <div className="border-t my-4"></div>
 
           <SidebarLink
+            href="/library"
+            icon={<PlaySquare />}
+            isOpen={isSidebarOpen}
+          >
+            Library
+          </SidebarLink>
+          <SidebarLink
             href="/history"
             icon={<History />}
             isOpen={isSidebarOpen}
           >
             History
           </SidebarLink>
-          <SidebarLink href="/liked" icon={<ThumbsUp />} isOpen={isSidebarOpen}>
-            Liked videos
+          <SidebarLink
+            href="/your-videos"
+            icon={<PlaySquare />}
+            isOpen={isSidebarOpen}
+          >
+            Your videos
           </SidebarLink>
           <SidebarLink
             href="/watch-later"
@@ -81,17 +92,22 @@ const Sidebar = () => {
           >
             Watch later
           </SidebarLink>
+          <SidebarLink href="/liked" icon={<ThumbsUp />} isOpen={isSidebarOpen}>
+            Liked videos
+          </SidebarLink>
 
           {user && (
             <>
               <div className="border-t my-4"></div>
-              <SidebarLink
-                href={`/channel/${user.id}`}
-                icon={<User />}
-                isOpen={isSidebarOpen}
+              <h2
+                className={cn(
+                  "text-lg font-semibold mb-2",
+                  isOpen ? "block" : "hidden"
+                )}
               >
-                Your channel
-              </SidebarLink>
+                Subscriptions
+              </h2>
+              {/* Add subscription links here */}
             </>
           )}
         </nav>
