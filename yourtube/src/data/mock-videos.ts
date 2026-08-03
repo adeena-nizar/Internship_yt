@@ -2,6 +2,7 @@ export const mockVideos = [
   {
     _id: "1",
     thumbnail: "https://source.unsplash.com/random/400x225?nature",
+    videoUrl: "/video/vdo.mp4",
     duration: "1:23:45",
     channelAvatar: "/avatars/avatar1.png",
     title: "Exploring the Amazon: A Journey into the Wild",
@@ -14,6 +15,7 @@ export const mockVideos = [
   {
     _id: "2",
     thumbnail: "https://source.unsplash.com/random/400x225?javascript",
+    videoUrl: "/video/vdo.mp4",
     duration: "45:12",
     channelAvatar: "/avatars/avatar2.png",
     title: "JavaScript for Beginners: A Complete Crash Course",
@@ -26,6 +28,7 @@ export const mockVideos = [
   {
     _id: "3",
     thumbnail: "https://source.unsplash.com/random/400x225?react",
+    videoUrl: "/video/vdo.mp4",
     duration: "2:10:30",
     channelAvatar: "/avatars/avatar3.png",
     title: "Mastering React: Build Modern Web Applications",
@@ -38,6 +41,7 @@ export const mockVideos = [
   {
     _id: "4",
     thumbnail: "https://source.unsplash.com/random/400x225?travel",
+    videoUrl: "/video/vdo.mp4",
     duration: "15:45",
     channelAvatar: "/avatars/avatar4.png",
     title: "A Week in Tokyo: A Cinematic Travel Vlog",
@@ -50,6 +54,7 @@ export const mockVideos = [
   {
     _id: "5",
     thumbnail: "https://source.unsplash.com/random/400x225?gaming",
+    videoUrl: "/video/vdo.mp4",
     duration: "30:22",
     channelAvatar: "/avatars/avatar5.png",
     title: "Pro Gaming Moments: The Best Highlights of the Year",
@@ -62,6 +67,7 @@ export const mockVideos = [
   {
     _id: "6",
     thumbnail: "https://source.unsplash.com/random/400x225?movie",
+    videoUrl: "/video/vdo.mp4",
     duration: "2:30",
     channelAvatar: "/avatars/avatar6.png",
     title: "Sci-Fi Epic: Official Movie Trailer (2024)",
@@ -74,6 +80,7 @@ export const mockVideos = [
   {
     _id: "7",
     thumbnail: "https://source.unsplash.com/random/400x225?football",
+    videoUrl: "/video/vdo.mp4",
     duration: "8:15",
     channelAvatar: "/avatars/avatar7.png",
     title: "Top 10 Goals of the Season: Football Highlights",
@@ -86,6 +93,7 @@ export const mockVideos = [
   {
     _id: "8",
     thumbnail: "https://source.unsplash.com/random/400x225?cooking",
+    videoUrl: "/video/vdo.mp4",
     duration: "12:50",
     channelAvatar: "/avatars/avatar8.png",
     title: "The Perfect Pizza: A Step-by-Step Cooking Guide",
@@ -98,6 +106,7 @@ export const mockVideos = [
   {
     _id: "9",
     thumbnail: "https://source.unsplash.com/random/400x225?podcast",
+    videoUrl: "/video/vdo.mp4",
     duration: "1:15:00",
     channelAvatar: "/avatars/avatar9.png",
     title: "The Future of AI: A Podcast with Industry Experts",
@@ -110,6 +119,7 @@ export const mockVideos = [
   {
     _id: "10",
     thumbnail: "https://source.unsplash.com/random/400x225?tech",
+    videoUrl: "/video/vdo.mp4",
     duration: "22:10",
     channelAvatar: "/avatars/avatar10.png",
     title: "The Ultimate Tech Review: Best Gadgets of the Year",
@@ -122,6 +132,7 @@ export const mockVideos = [
   {
     _id: "11",
     thumbnail: "/thumbnails/history.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "35:40",
     channelAvatar: "/avatars/avatar1.png",
     title: "The Rise and Fall of the Roman Empire: A Documentary",
@@ -133,6 +144,7 @@ export const mockVideos = [
   {
     _id: "12",
     thumbnail: "/thumbnails/science.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "18:20",
     channelAvatar: "/avatars/avatar2.png",
     title: "The Wonders of the Cosmos: A Journey Through Space",
@@ -144,6 +156,7 @@ export const mockVideos = [
   {
     _id: "13",
     thumbnail: "/thumbnails/music-production.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "25:55",
     channelAvatar: "/avatars/avatar3.png",
     title: "Music Production Masterclass: Creating a Hit Song",
@@ -155,6 +168,7 @@ export const mockVideos = [
   {
     _id: "14",
     thumbnail: "/thumbnails/diy.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "9:30",
     channelAvatar: "/avatars/avatar4.png",
     title: "DIY Home Decor: Creative Ideas for Your Living Space",
@@ -166,6 +180,7 @@ export const mockVideos = [
   {
     _id: "15",
     thumbnail: "/thumbnails/fitness.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "20:00",
     channelAvatar: "/avatars/avatar5.png",
     title: "Full Body Workout: A 20-Minute Fitness Routine",
@@ -177,6 +192,7 @@ export const mockVideos = [
   {
     _id: "16",
     thumbnail: "/thumbnails/comedy.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "5:45",
     channelAvatar: "/avatars/avatar6.png",
     title: "Stand-Up Comedy Special: Hilarious Jokes and Stories",
@@ -188,6 +204,7 @@ export const mockVideos = [
   {
     _id: "17",
     thumbnail: "/thumbnails/art.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "14:20",
     channelAvatar: "/avatars/avatar7.png",
     title: "The Art of Painting: A Beginner's Guide to Watercolors",
@@ -199,6 +216,7 @@ export const mockVideos = [
   {
     _id: "18",
     thumbnail: "/thumbnails/business.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "28:30",
     channelAvatar: "/avatars/avatar8.png",
     title: "The Psychology of Business: How to Succeed in the Market",
@@ -210,6 +228,7 @@ export const mockVideos = [
   {
     _id: "19",
     thumbnail: "/thumbnails/language.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "10:15",
     channelAvatar: "/avatars/avatar9.png",
     title: "Learn a New Language: A Guide to Speaking Fluent Spanish",
@@ -221,6 +240,7 @@ export const mockVideos = [
   {
     _id: "20",
     thumbnail: "/thumbnails/photography.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "19:45",
     channelAvatar: "/avatars/avatar10.png",
     title: "Mastering Photography: A Guide to Taking Stunning Photos",
@@ -232,6 +252,7 @@ export const mockVideos = [
   {
     _id: "21",
     thumbnail: "/thumbnails/meditation.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "15:00",
     channelAvatar: "/avatars/avatar1.png",
     title: "Guided Meditation for Stress Relief and Relaxation",
@@ -243,6 +264,7 @@ export const mockVideos = [
   {
     _id: "22",
     thumbnail: "/thumbnails/finance.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "25:10",
     channelAvatar: "/avatars/avatar2.png",
     title: "Investing for Beginners: A Guide to Building Wealth",
@@ -254,6 +276,7 @@ export const mockVideos = [
   {
     _id: "23",
     thumbnail: "/thumbnails/woodworking.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "30:00",
     channelAvatar: "/avatars/avatar3.png",
     title: "Woodworking for Beginners: Building a Bookshelf",
@@ -265,6 +288,7 @@ export const mockVideos = [
   {
     _id: "24",
     thumbnail: "/thumbnails/magic.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "7:30",
     channelAvatar: "/avatars/avatar4.png",
     title: "Mind-Blowing Magic Tricks: How to Amaze Your Friends",
@@ -276,6 +300,7 @@ export const mockVideos = [
   {
     _id: "25",
     thumbnail: "/thumbnails/gardening.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "18:45",
     channelAvatar: "/avatars/avatar5.png",
     title: "Gardening for Beginners: How to Grow Your Own Vegetables",
@@ -287,6 +312,7 @@ export const mockVideos = [
   {
     _id: "26",
     thumbnail: "/thumbnails/robotics.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "22:15",
     channelAvatar: "/avatars/avatar6.png",
     title: "The Future of Robotics: A Look at the Latest Innovations",
@@ -298,6 +324,7 @@ export const mockVideos = [
   {
     _id: "27",
     thumbnail: "/thumbnails/animation.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "12:00",
     channelAvatar: "/avatars/avatar7.png",
     title: "The Art of Animation: A Beginner's Guide to 2D Animation",
@@ -309,6 +336,7 @@ export const mockVideos = [
   {
     _id: "28",
     thumbnail: "/thumbnails/baking.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "16:30",
     channelAvatar: "/avatars/avatar8.png",
     title: "The Perfect Cake: A Step-by-Step Baking Guide",
@@ -320,6 +348,7 @@ export const mockVideos = [
   {
     _id: "29",
     thumbnail: "/thumbnails/chess.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "20:10",
     channelAvatar: "/avatars/avatar9.png",
     title: "Chess Masterclass: How to Improve Your Game",
@@ -331,6 +360,7 @@ export const mockVideos = [
   {
     _id: "30",
     thumbnail: "/thumbnails/writing.jpg",
+    videoUrl: "/video/vdo.mp4",
     duration: "14:50",
     channelAvatar: "/avatars/avatar10.png",
     title: "The Art of Writing: A Guide to Crafting Compelling Stories",
