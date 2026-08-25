@@ -9,6 +9,7 @@ import {
   User,
   Menu,
   X,
+  Download,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -77,6 +78,13 @@ const Sidebar = () => {
             isOpen={isSidebarOpen}
           >
             History
+          </SidebarLink>
+          <SidebarLink
+            href="/downloads"
+            icon={<Download />}
+            isOpen={isSidebarOpen}
+          >
+            Downloads
           </SidebarLink>
           <SidebarLink
             href="/channel"

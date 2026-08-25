@@ -12,7 +12,7 @@ const Videogrid = () => {
     selectedCategory === "All"
       ? mockVideos
       : mockVideos.filter((video) =>
-          video.category.toLowerCase().includes(selectedCategory.toLowerCase())
+          video.category && video.category.toLowerCase().includes(selectedCategory.toLowerCase())
         );
 
   return (

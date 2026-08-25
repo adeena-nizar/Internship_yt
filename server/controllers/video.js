@@ -25,14 +25,37 @@ export const uploadvideo = async (req, res) => {
   }
 };
 export const getallvideo = async (req, res) => {
-  const { category } = req.query;
-  try {
-    let query = {};
-    if (category && category !== "All") {
-      query = { videotitle: category };
+  const mockVideos = [
+    {
+      _id: "1",
+      videotitle: "Example Video 1",
+      filename: "example1.mp4",
+      filepath: "/path/to/video1.mp4",
+      filetype: "video/mp4",
+      filesize: "123456",
+      videochanel: "Mock Channel 1",
+      uploader: "Mock Uploader 1",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      __v: 0
+    },
+    {
+      _id: "2",
+      videotitle: "Example Video 2",
+      filename: "example2.mp4",
+      filepath: "/path/to/video2.mp4",
+      filetype: "video/mp4",
+      filesize: "789012",
+      videochanel: "Mock Channel 2",
+      uploader: "Mock Uploader 2",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      __v: 0
     }
-    const files = await video.find(query);
-    return res.status(200).send(files);
+  ];
+
+  try {
+    return res.status(200).send(mockVideos);
   } catch (error) {
     console.error(" error:", error);
     return res.status(500).json({ message: "Something went wrong" });

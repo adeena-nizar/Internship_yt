@@ -10,6 +10,7 @@ import {
   Clock,
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 const ActionButtons = ({ video }: { video: any }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -111,6 +112,37 @@ const ActionButtons = ({ video }: { video: any }) => {
     localStorage.setItem("watchLaterVideos", JSON.stringify(watchLaterVideos));
   };
 
+  const handleDownload = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/download/${video._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        // This is a simplified download trigger. In a real app, you'd likely
+        // get a download link from the backend and use it here.
+        const link = document.createElement("a");
+        link.href = video.videoUrl;
+        link.setAttribute("download", video.title);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 403) {
+        alert("You have reached your daily download limit.");
+      } else {
+        console.error("Download failed", error);
+        alert("Failed to download video.");
+      }
+    }
+  };
+
   return (
     <div className="flex items-center gap-2">
       <Button
@@ -132,16 +164,17 @@ const ActionButtons = ({ video }: { video: any }) => {
       <Button
         variant="ghost"
         className="rounded-full hover:bg-gray-200 px-4 py-2"
+        onClick={handleDownload}
       >
-        <Share className="w-6 h-6 mr-2" />
-        <span>Share</span>
+        <Download className="w-6 h-6 mr-2" />
+        <span>Download</span>
       </Button>
       <Button
         variant="ghost"
         className="rounded-full hover:bg-gray-200 px-4 py-2"
       >
-        <Download className="w-6 h-6 mr-2" />
-        <span>Download</span>
+        <Share className="w-6 h-6 mr-2" />
+        <span>Share</span>
       </Button>
       <Button
         variant="ghost"

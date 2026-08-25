@@ -14,6 +14,9 @@ const commentschema = mongoose.Schema(
     commentbody: { type: String },
     usercommented: { type: String },
     commentedon: { type: Date, default: Date.now },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    reports: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
   },
   {
     timestamps: true,
