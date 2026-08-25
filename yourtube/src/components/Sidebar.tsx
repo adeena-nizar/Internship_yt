@@ -10,6 +10,7 @@ import {
   Menu,
   X,
   Download,
+  Star,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -41,7 +42,7 @@ const Sidebar = () => {
           "fixed md:relative md:translate-x-0",
           isSidebarOpen
             ? "w-64 translate-x-0"
-            : "w-20 -translate-x-full md:translate-x-0"
+            : "w-20 -translate-x-full md:w-20 md:translate-x-0"
         )}
       >
         <nav className="space-y-2">
@@ -57,7 +58,7 @@ const Sidebar = () => {
           </SidebarLink>
           <SidebarLink
             href="/subscriptions"
-            icon={<PlaySquare />}
+            icon={<Star />}
             isOpen={isSidebarOpen}
           >
             Subscriptions

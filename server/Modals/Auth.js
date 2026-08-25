@@ -17,6 +17,15 @@ const userschema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  subscription: {
+    plan: {
+      type: String,
+      default: "Free",
+    },
+    expiresAt: {
+      type: Date,
+    },
+  },
 });
 
 export default mongoose.model("user", userschema);

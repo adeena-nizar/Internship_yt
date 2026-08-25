@@ -27,7 +27,8 @@ app.use("/watch", watchlaterroutes);
 app.use("/history", historyrroutes);
 app.use("/comment", commentroutes);
 import downloadRoutes from "./routes/download.js";
-app.use("/api/download", downloadRoutes);
+import subscriptionRoutes from "./routes/subscription.js";
+app.use("/api/subscription", subscriptionRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
