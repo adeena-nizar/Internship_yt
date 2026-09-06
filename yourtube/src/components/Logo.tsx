@@ -14,7 +14,9 @@ const Logo = () => {
           <path d="M8 5v14l11-7z" />
         </svg>
       </div>
-      <span className="text-2xl font-bold tracking-tighter">YourTube IN</span>
+      <span className="text-2xl font-bold tracking-tighter text-black">
+        YourTube IN
+      </span>
     </div>
   );
 };

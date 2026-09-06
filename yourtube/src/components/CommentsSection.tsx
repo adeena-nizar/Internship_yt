@@ -102,11 +102,12 @@ const CommentsSection = ({ videoId }: { videoId: string }) => {
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
   const [user, setUser] = useState<any>(null);
-  const [translatedComment, setTranslatedComment] = useState(null);
+  const [translatedComment, setTranslatedComment] = useState<{ id: string; text: string } | null>(null);
   const [targetLang, setTargetLang] = useState("en");
 
   useEffect(() => {
-    const currentUser = JSON.parse(localStorage.getItem("user"));
+    const userStr = localStorage.getItem("user");
+    const currentUser = userStr ? JSON.parse(userStr) : null;
     setUser(currentUser);
     fetchComments();
   }, [videoId]);
@@ -198,11 +199,11 @@ const CommentsSection = ({ videoId }: { videoId: string }) => {
     }
   };
 
-  const handleReply = (commentId: number, replyText: string) => {
+  const handleReply = (commentId: string, replyText: string) => {
     // Reply functionality to be implemented
   };
 
-  const handleTranslate = async (commentId, commentBody) => {
+  const handleTranslate = async (commentId: string, commentBody: string) => {
     try {
       const response = await axios.post(
         `http://localhost:5000/comment/translate/${commentId}`,
@@ -242,7 +243,7 @@ const CommentsSection = ({ videoId }: { videoId: string }) => {
       </div>
       <div className="flex items-start gap-4">
         <Avatar>
-          <AvatarFallback>{user?.result.name.charAt(0)}</AvatarFallback>
+          <AvatarFallback>{user?.result?.name?.charAt(0) ?? "U"}</AvatarFallback>
         </Avatar>
         <div className="flex-1">
           <Input

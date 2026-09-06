@@ -28,7 +28,12 @@ app.use("/history", historyrroutes);
 app.use("/comment", commentroutes);
 import downloadRoutes from "./routes/download.js";
 import subscriptionRoutes from "./routes/subscription.js";
+import otpRoutes from "./routes/otp.js";
+
 app.use("/api/subscription", subscriptionRoutes);
+app.use("/api/downloads", downloadRoutes);
+app.use("/api", otpRoutes);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
@@ -45,6 +50,7 @@ const DBURL = process.env.DB_URL;
 //     console.log(error);
 //   });
 
-mongoose.connect("mongodb://localhost:27017/yourtube", { useNewUrlParser: true, useUnifiedTopology: true })
-.then(()=> console.log("MongoDB connected"))
-.catch(err => console.log(err));
+mongoose
+  .connect("mongodb://localhost:27017/yourtube")
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));

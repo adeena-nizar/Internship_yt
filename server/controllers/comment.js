@@ -15,6 +15,9 @@ export const postcomment = async (req, res) => {
 };
 export const getallcomment = async (req, res) => {
   const { videoid } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(videoid)) {
+    return res.status(400).send("Invalid video id");
+  }
   try {
     const commentvideo = await comment.find({ videoid: videoid });
     return res.status(200).json(commentvideo);

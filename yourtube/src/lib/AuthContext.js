@@ -1,20 +1,20 @@
-"use client";
+"use client"; 
 import { useState, createContext, useEffect, useContext } from "react";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);  
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+  useEffect(() => { 
+    const storedUser = localStorage.getItem("user"); 
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      setUser(JSON.parse(storedUser)); 
     }
-  }, []);
+  }, []);  
 
-  const login = () => {
-    const mockUser = {
+  const login = () => {   
+    const mockUser = { 
       name: "Demo User",
       email: "demo@example.com",
       image: "https://github.com/shadcn.png",

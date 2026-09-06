@@ -111,7 +111,7 @@ const Sidebar = () => {
               <h2
                 className={cn(
                   "text-lg font-semibold mb-2",
-                  isOpen ? "block" : "hidden"
+                  isSidebarOpen ? "block" : "hidden"
                 )}
               >
                 Subscriptions
@@ -130,7 +130,7 @@ const SidebarLink = ({ href, icon, isOpen, children }: any) => (
     <Button
       variant="ghost"
       className={cn(
-        "w-full flex items-center gap-4 transition-all",
+        "w-full flex items-center gap-4 transition-all text-black",
         isOpen ? "justify-start" : "justify-center"
       )}
     >

@@ -4,8 +4,29 @@ import axios from "axios";
 import Script from "next/script";
 import { useUser } from "../../lib/AuthContext";
 
+interface Subscription {
+  _id: string;
+  name: string;
+  price: number;
+  features: string[];
+}
+
+interface RazorpayResponse {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+}
+
+declare global {
+  interface Window {
+    Razorpay: new (options: Record<string, unknown>) => {
+      open: () => void;
+    };
+  }
+}
+
 const SubscriptionsPage = () => {
-  const [subscriptions, setSubscriptions] = useState([]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const { user: currentUser } = useUser();
 
   useEffect(() => {
@@ -20,7 +41,7 @@ const SubscriptionsPage = () => {
     fetchSubscriptions();
   }, []);
 
-  const handleUpgrade = async (subscription) => {
+  const handleUpgrade = async (subscription: Subscription) => {
     try {
       const { data: order } = await axios.post("http://localhost:5000/api/subscription/order", {
         subscriptionId: subscription._id,
@@ -33,7 +54,7 @@ const SubscriptionsPage = () => {
         name: "Yourtube",
         description: `Upgrade to ${subscription.name}`,
         order_id: order.id,
-        handler: async function (response) {
+        handler: async function (response: RazorpayResponse) {
           try {
             await axios.post("http://localhost:5000/api/subscription/verify", {
               razorpay_payment_id: response.razorpay_payment_id,

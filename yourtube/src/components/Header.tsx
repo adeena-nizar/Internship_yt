@@ -1,5 +1,5 @@
 "use client";
-import { Bell, Menu, Mic, Search, User, VideoIcon, X } from "lucide-react";
+import { Bell, Menu, Mic, Search, User, VideoIcon, X, Sun, Moon } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -16,6 +16,7 @@ import { useUser } from "@/lib/AuthContext";
 import { useRouter } from "next/navigation";
 import Logo from "./Logo";
 import { mockVideos } from "@/data/mock-videos";
+import axios from "axios";
 
 const Header = () => {
   const { user, logout, handlegooglesignin } = useUser();
@@ -23,8 +24,31 @@ const Header = () => {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [theme, setTheme] = useState("dark");
   const router = useRouter();
   const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (user) {
+      setTheme(user.theme);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    document.body.className = theme;
+  }, [theme]);
+
+  const handleThemeChange = async () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    try {
+      await axios.patch(`http://localhost:5000/api/users/update-theme/${user._id}`, {
+        theme: newTheme,
+      });
+    } catch (error) {
+      console.error("Failed to update theme", error);
+    }
+  };
 
   useEffect(() => {
     const storedSearches = JSON.parse(
@@ -210,6 +234,11 @@ const Header = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/watch-later">Watch later</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleThemeChange}>
+                  {theme === "light" ? <Moon className="mr-2 h-4 w-4" /> : <Sun className="mr-2 h-4 w-4" />}
+                  <span>{theme === "light" ? "Dark" : "Light"} Mode</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>Sign out</DropdownMenuItem>

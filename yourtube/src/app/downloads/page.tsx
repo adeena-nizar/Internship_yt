@@ -3,18 +3,26 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 
+interface DownloadVideo {
+  _id: string;
+  thumbnailUrl?: string;
+  title?: string;
+}
+
+interface Download {
+  _id: string;
+  videoId: DownloadVideo;
+  downloadDate: string;
+}
+
 const DownloadsPage = () => {
-  const [downloads, setDownloads] = useState([]);
+  const [downloads, setDownloads] = useState<Download[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDownloads = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/downloads", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get("http://localhost:5000/api/downloads");
         setDownloads(response.data);
       } catch (error) {
         console.error("Failed to fetch downloads", error);

@@ -4,7 +4,11 @@ import moment from "moment";
 
 export const downloadVideo = async (req, res) => {
   const { videoId } = req.params;
-  const userId = req.user.id;
+  const userId = req.userId;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Authentication required" });
+  }
 
   try {
     const user = await User.findById(userId);
@@ -14,7 +18,22 @@ export const downloadVideo = async (req, res) => {
     }
 
     const today = moment().startOf("day");
-    const downloadLimit = user.isPremium ? 10 : 1;
+    let downloadLimit = 0;
+
+    switch (user.subscription.plan) {
+      case "Free":
+        downloadLimit = 1;
+        break;
+      case "Bronze":
+        downloadLimit = 50;
+        break;
+      case "Silver":
+      case "Gold":
+        downloadLimit = Infinity;
+        break;
+      default:
+        downloadLimit = 0;
+    }
 
     if (
       user.lastDownloadDate &&
@@ -52,7 +71,11 @@ export const downloadVideo = async (req, res) => {
 };
 
 export const getDownloadedVideos = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userId;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Authentication required" });
+  }
 
   try {
     const downloads = await Download.find({ userId }).populate("videoId");

@@ -1,13 +1,19 @@
+import "dotenv/config";
 import Subscription from "../Modals/Subscription.js";
 import User from "../Modals/Auth.js";
 import Payment from "../Modals/Payment.js";
 import Razorpay from "razorpay";
 import crypto from "crypto";
+import { sendSubscriptionConfirmation } from "../utils/email.js";
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+const getRazorpay = () => {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) {
+    throw new Error("Razorpay API keys are not configured");
+  }
+  return new Razorpay({ key_id: keyId, key_secret: keySecret });
+};
 
 export const getSubscriptions = async (req, res) => {
   try {
@@ -21,12 +27,15 @@ export const getSubscriptions = async (req, res) => {
 export const createOrder = async (req, res) => {
   try {
     const subscription = await Subscription.findById(req.body.subscriptionId);
+    if (!subscription) {
+      return res.status(404).json({ message: "Subscription not found" });
+    }
     const options = {
       amount: subscription.price * 100, // amount in the smallest currency unit
       currency: "INR",
       receipt: `receipt_order_${new Date().getTime()}`,
     };
-    const order = await razorpay.orders.create(options);
+    const order = await getRazorpay().orders.create(options);
     res.status(200).json(order);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -34,6 +43,12 @@ export const createOrder = async (req, res) => {
 };
 
 export const verifyPayment = async (req, res) => {
+  const userId = req.userId;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Authentication required" });
+  }
+
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
     const body = razorpay_order_id + "|" + razorpay_payment_id;
@@ -42,21 +57,23 @@ export const verifyPayment = async (req, res) => {
       .update(body.toString())
       .digest("hex");
 
-import { sendSubscriptionConfirmation } from "../utils/email.js";
-
-// ... (rest of the controller)
-
     if (expectedSignature === razorpay_signature) {
-      const order = await razorpay.orders.fetch(razorpay_order_id);
+      const order = await getRazorpay().orders.fetch(razorpay_order_id);
       const subscription = await Subscription.findOne({ price: order.amount / 100 });
-      const user = await User.findById(req.userId);
+      if (!subscription) {
+        return res.status(404).json({ message: "Subscription not found" });
+      }
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
       user.subscription.plan = subscription.name;
       user.subscription.expiresAt = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
       await user.save();
 
       const payment = new Payment({
-        userId: req.userId,
+        userId,
         subscriptionId: subscription._id,
         razorpay_payment_id,
         amount: order.amount / 100,
@@ -69,7 +86,6 @@ import { sendSubscriptionConfirmation } from "../utils/email.js";
     } else {
       res.status(400).json({ message: "Invalid signature" });
     }
-// ... (rest of the controller)
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

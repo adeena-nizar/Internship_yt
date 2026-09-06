@@ -26,6 +26,16 @@ const userschema = mongoose.Schema({
       type: Date,
     },
   },
+  theme: {
+    type: String,
+    enum: ["light", "dark"],
+    default: "dark",
+  },
+  lastLogin: {
+    device: { type: String },
+    city: { type: String },
+    state: { type: String },
+  },
 });
 
 export default mongoose.model("user", userschema);
