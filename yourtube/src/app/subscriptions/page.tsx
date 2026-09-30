@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Script from "next/script";
-import { useUser } from "../../lib/AuthContext";
+import { UserContext } from "@/context/UserContext";
 
 interface Subscription {
   _id: string;
@@ -27,7 +27,8 @@ declare global {
 
 const SubscriptionsPage = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const { user: currentUser } = useUser();
+  const context = useContext(UserContext);
+  const { user: currentUser } = context || {};
 
   useEffect(() => {
     const fetchSubscriptions = async () => {

@@ -1,6 +1,6 @@
 "use client";
 import { Bell, Menu, Mic, Search, User, VideoIcon, X, Sun, Moon } from "lucide-react";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Input } from "./ui/input";
@@ -12,41 +12,62 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { useUser } from "@/lib/AuthContext";
+import { UserContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import Logo from "./Logo";
 import { mockVideos } from "@/data/mock-videos";
-import axios from "axios";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import OtpForm from "./OtpForm";
 
-const Header = () => {
-  const { user, logout, handlegooglesignin } = useUser();
+export const Header = () => {
+  const context = useContext(UserContext);
+  const { user, logout, theme, updateTheme } = context || {};
+  const [otpRequired, setOtpRequired] = useState(false);
+  const [challengeId, setChallengeId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleGoogleSignIn = useGoogleAuth({
+    setError,
+    setIsLoading,
+    setChallengeId,
+    setOtpRequired,
+    login: context?.login,
+    router,
+  });
+
+  useEffect(() => {
+    console.log("User state in Header:", user);
+  }, [user]);
+
+  if (otpRequired && challengeId) {
+    return (
+      <OtpForm
+        challengeId={challengeId}
+        onVerify={() => {
+          setOtpRequired(false);
+          router.push("/");
+        }}
+        onResend={() => {
+          // Implement resend logic if needed
+        }}
+        isLoading={isLoading}
+        error={error}
+      />
+    );
+  }
+
   const [searchQuery, setSearchQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [theme, setTheme] = useState("dark");
-  const router = useRouter();
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (user) {
-      setTheme(user.theme);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    document.body.className = theme;
-  }, [theme]);
-
-  const handleThemeChange = async () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    try {
-      await axios.patch(`http://localhost:5000/api/users/update-theme/${user._id}`, {
-        theme: newTheme,
-      });
-    } catch (error) {
-      console.error("Failed to update theme", error);
+  const handleThemeChange = () => {
+    if (updateTheme) {
+      const newTheme = theme === "light" ? "dark" : "light";
+      updateTheme(newTheme);
     }
   };
 
@@ -120,7 +141,7 @@ const Header = () => {
   }, [searchQuery]);
 
   return (
-    <header className="flex items-center justify-between px-4 py-2 bg-white border-b sticky top-0 z-20">
+    <header className="flex items-center justify-between px-4 py-2 bg-white dark:bg-black border-b sticky top-0 z-20">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" className="md:hidden">
           <Menu className="w-6 h-6" />
@@ -150,12 +171,12 @@ const Header = () => {
           </div>
         </form>
         {isSearchFocused && (
-          <div className="absolute top-full mt-2 w-full bg-white border rounded-lg shadow-lg z-10">
+          <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-900 border rounded-lg shadow-lg z-10">
             {suggestions.length > 0 ? (
               suggestions.map((video) => (
                 <div
                   key={video._id}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
                   onClick={(e) => handleSearch(e, video.title)}
                 >
                   {video.title}
@@ -175,7 +196,7 @@ const Header = () => {
                 {recentSearches.map((search) => (
                   <div
                     key={search}
-                    className="flex justify-between items-center p-2 hover:bg-gray-100 cursor-pointer"
+                    className="flex justify-between items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
                     onClick={(e) => handleSearch(e, search)}
                   >
                     <span>{search}</span>
@@ -195,7 +216,7 @@ const Header = () => {
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full bg-gray-100 ml-4"
+          className="rounded-full bg-gray-100 dark:bg-gray-800 ml-4"
         >
           <Mic className="w-5 h-5" />
         </Button>
@@ -217,7 +238,7 @@ const Header = () => {
                   className="relative h-10 w-10 rounded-full"
                 >
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={user.image} />
+                    <AvatarImage src={""} />
                     <AvatarFallback>{user.name?.[0] || "U"}</AvatarFallback>
                   </Avatar>
                 </Button>
@@ -250,7 +271,7 @@ const Header = () => {
             <Button
               variant="outline"
               className="flex items-center gap-2 rounded-full border-gray-300"
-              onClick={handlegooglesignin}
+              onClick={handleGoogleSignIn}
             >
               <User className="w-5 h-5 text-blue-500" />
               <span className="font-semibold text-blue-500">Sign in</span>
@@ -261,5 +282,3 @@ const Header = () => {
     </header>
   );
 };
-
-export default Header;

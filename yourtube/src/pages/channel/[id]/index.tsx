@@ -2,14 +2,15 @@ import ChannelHeader from "@/components/ChannelHeader";
 import Channeltabs from "@/components/Channeltabs";
 import ChannelVideos from "@/components/ChannelVideos";
 import VideoUploader from "@/components/VideoUploader";
-import { useUser } from "@/lib/AuthContext";
+import { UserContext } from "@/context/UserContext";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext } from "react";
 
 const ChannelPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { user } = useUser();
+  const context = useContext(UserContext);
+  const { user } = context || {};
 
   const channel = user || {
     name: "YourTube IN Creator",
@@ -53,7 +54,7 @@ const ChannelPage = () => {
         <ChannelHeader channel={channel} user={user} />
         <Channeltabs />
         <div className="px-4 pb-8">
-          <VideoUploader channelId={id} channelName={channel.channelname} />
+          <VideoUploader channelId={id} channelName={channel.name} />
         </div>
         <div className="px-4 pb-8">
           <ChannelVideos videos={videos} />

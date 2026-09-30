@@ -10,7 +10,8 @@ import {
   ThumbsUp,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { useUser } from "@/lib/AuthContext";
+import { UserContext } from "@/context/UserContext";
+import { useContext } from "react";
 import axiosInstance from "@/lib/axiosinstance";
 
 const VideoInfo = ({ video }: any) => {
@@ -19,7 +20,8 @@ const VideoInfo = ({ video }: any) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const { user } = useUser();
+  const context = useContext(UserContext);
+  const user = context?.user;
   const [isWatchLater, setIsWatchLater] = useState(false);
 
   // const user: any = {
@@ -40,7 +42,7 @@ const VideoInfo = ({ video }: any) => {
       if (user) {
         try {
           return await axiosInstance.post(`/history/${video._id}`, {
-            userId: user?._id,
+            userId: user?.id,
           });
         } catch (error) {
           return console.log(error);
@@ -55,7 +57,7 @@ const VideoInfo = ({ video }: any) => {
     if (!user) return;
     try {
       const res = await axiosInstance.post(`/like/${video._id}`, {
-        userId: user?._id,
+        userId: user?.id,
       });
       if (res.data.liked) {
         if (isLiked) {
@@ -77,7 +79,7 @@ const VideoInfo = ({ video }: any) => {
   const handleWatchLater = async () => {
     try {
       const res = await axiosInstance.post(`/watch/${video._id}`, {
-        userId: user?._id,
+        userId: user?.id,
       });
       if (res.data.watchlater) {
         setIsWatchLater(!isWatchLater);
@@ -92,7 +94,7 @@ const VideoInfo = ({ video }: any) => {
     if (!user) return;
     try {
       const res = await axiosInstance.post(`/like/${video._id}`, {
-        userId: user?._id,
+        userId: user?.id,
       });
       if (!res.data.liked) {
         if (isDisliked) {

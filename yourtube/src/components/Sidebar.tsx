@@ -15,11 +15,13 @@ import {
 import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { useUser } from "@/lib/AuthContext";
+import { UserContext } from "@/context/UserContext";
 import { cn } from "@/lib/utils";
+import { useContext } from "react";
 
 const Sidebar = () => {
-  const { user } = useUser();
+  const context = useContext(UserContext);
+  const { user } = context || {};
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {

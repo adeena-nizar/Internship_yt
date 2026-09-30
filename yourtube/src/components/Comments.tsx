@@ -3,7 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { formatDistanceToNow } from "date-fns";
-import { useUser } from "@/lib/AuthContext";
+import { UserContext } from "@/context/UserContext";
+import { useContext } from "react";
 import axiosInstance from "@/lib/axiosinstance";
 interface Comment {
   _id: string;
@@ -19,7 +20,8 @@ const Comments = ({ videoId }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
-  const { user } = useUser();
+  const context = useContext(UserContext);
+  const user = context?.user;
   const [loading, setLoading] = useState(true);
   const fetchedComments = [
     {
@@ -63,7 +65,7 @@ const Comments = ({ videoId }: any) => {
     try {
       const res = await axiosInstance.post("/comment/postcomment", {
         videoid: videoId,
-        userid: user._id,
+        userid: user.id,
         commentbody: newComment,
         usercommented: user.name,
       });
@@ -71,7 +73,7 @@ const Comments = ({ videoId }: any) => {
         const newCommentObj: Comment = {
           _id: Date.now().toString(),
           videoid: videoId,
-          userid: user._id,
+          userid: user.id,
           commentbody: newComment,
           usercommented: user.name || "Anonymous",
           commentedon: new Date().toISOString(),
@@ -129,7 +131,7 @@ const Comments = ({ videoId }: any) => {
       {user && (
         <div className="flex gap-4">
           <Avatar className="w-10 h-10">
-            <AvatarImage src={user.image || ""} />
+            <AvatarImage src={""} />
             <AvatarFallback>{user.name?.[0] || "U"}</AvatarFallback>
           </Avatar>
           <div className="flex-1 space-y-2">
@@ -206,7 +208,7 @@ const Comments = ({ videoId }: any) => {
                 ) : (
                   <>
                     <p className="text-sm">{comment.commentbody}</p>
-                    {comment.userid === user?._id && (
+                    {comment.userid === user?.id && (
                       <div className="flex gap-2 mt-2 text-sm text-gray-500">
                         <button onClick={() => handleEdit(comment)}>
                           Edit

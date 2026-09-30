@@ -12,10 +12,13 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import axiosInstance from "@/lib/axiosinstance";
-import { useUser } from "@/lib/AuthContext";
+import { UserContext } from "@/context/UserContext";
+import { useContext } from "react";
 
 const Channeldialogue = ({ isopen, onclose, channeldata, mode }: any) => {
-  const { user, login } = useUser();
+  const context = useContext(UserContext);
+  const user = context?.user;
+  const login = context?.login;
   // const user: any = {
   //   id: "1",
   //   name: "John Doe",
@@ -49,16 +52,21 @@ const Channeldialogue = ({ isopen, onclose, channeldata, mode }: any) => {
   };
   const handlesubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!user || !login) return;
+
     const payload = {
       channelname: formData.name,
       description: formData.description,
     };
     const response = await axiosInstance.patch(
-      `/user/update/${user._id}`,
+      `/user/update/${user.id}`,
       payload
     );
-    login(response?.data);
-    router.push(`/channel/${user?._id}`);
+    const token = localStorage.getItem('token');
+    if (token && response?.data) {
+      login(token, response.data);
+    }
+    router.push(`/channel/${user.id}`);
     setFormData({
       name: "",
       description: "",
