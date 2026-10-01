@@ -1,13 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { useParams } from "next/navigation";
 import { useSocket } from "@/context/SocketContext";
-import { useUser } from "@/context/UserContext";
+import { UserContext } from "@/context/UserContext";
 
 const PartyPage = () => {
-  const { partyId } = useParams();
+  const params = useParams();
+  const partyId = params?.partyId as string;
   const { socket } = useSocket();
-  const { user } = useUser();
+  const context = useContext(UserContext);
+  const user = context?.user;
   const [participants, setParticipants] = useState({});
 
   useEffect(() => {
