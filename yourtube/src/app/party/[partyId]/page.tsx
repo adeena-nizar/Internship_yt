@@ -31,7 +31,7 @@ const PartyPage = () => {
   }, [socket, user, partyId]);
 
   return (
-    <div>
+    <div className="flex flex-col lg:flex-row gap-4 p-4">
       <h1>Watch Party: {partyId}</h1>
       <h2>Participants</h2>
       <ul>

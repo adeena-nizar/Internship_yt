@@ -23,7 +23,9 @@ export default function RootLayout({
                 <UserProvider>
                     <SocketProvider>
                         <ThemeRegistry>
-                            {children}
+                            <div className="flex-grow lg:ml-60">
+                                {children}
+                            </div>
                         </ThemeRegistry>
                     </SocketProvider>
                 </UserProvider>

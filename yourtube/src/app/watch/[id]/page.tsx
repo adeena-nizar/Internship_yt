@@ -46,7 +46,7 @@ const WatchPage = () => {
   }
 
   return (
-    <div className="p-4 md:p-8 lg:p-12">
+    <div className="flex flex-col lg:flex-row gap-4 p-4 md:p-8 lg:p-12">
       <video src={video.videoUrl} controls className="w-full rounded-lg"></video>
       <h1 className="text-2xl md:text-3xl font-bold mt-4">{video.title}</h1>
       <p className="text-gray-600 mt-2">{video.description}</p>

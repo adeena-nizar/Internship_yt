@@ -21,7 +21,7 @@ import OtpForm from "./OtpForm";
 
 export const Header = () => {
   const context = useContext(UserContext);
-  const { user, logout, theme, updateTheme } = context || {};
+  const { user, logout, theme, updateTheme, toggleSidebar } = context || {};
   const [otpRequired, setOtpRequired] = useState(false);
   const [challengeId, setChallengeId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -143,7 +143,7 @@ export const Header = () => {
   return (
     <header className="flex items-center justify-between px-4 py-2 bg-white dark:bg-black border-b sticky top-0 z-20">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button onClick={toggleSidebar} variant="ghost" size="icon" className="lg:hidden">
           <Menu className="w-6 h-6" />
         </Button>
         <Link href="/" className="flex items-center gap-2">

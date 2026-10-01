@@ -17,6 +17,8 @@ interface UserContextType {
   login: (token: string, user: User) => void;
   logout: () => void;
   updateTheme: (newTheme: 'light' | 'dark') => void;
+  isSidebarOpen: boolean;
+  toggleSidebar: () => void;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -24,6 +26,7 @@ export const UserContext = createContext<UserContextType | undefined>(undefined)
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -70,8 +73,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <UserContext.Provider value={{ user, theme, login, logout, updateTheme }}>
+    <UserContext.Provider value={{ user, theme, login, logout, updateTheme, isSidebarOpen, toggleSidebar }}>
       {children}
     </UserContext.Provider>
   );
